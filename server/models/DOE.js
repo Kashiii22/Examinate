@@ -42,7 +42,7 @@ const DOESchema = new mongoose.Schema({
     address: { type: String, required: true, trim: true },
     state: { type: String, required: true, trim: true },
     dob: { type: Date, required: true },
-    role: { type: String, default: "DOE" },
+    role: { type: String, default: "DEO" },
     username: {
         type: String,
         required: true,
