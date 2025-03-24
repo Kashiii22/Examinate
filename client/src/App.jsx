@@ -6,6 +6,7 @@ import DashboardLayoutBasic from "./components/superAdmin/superAdmin";
 import ExamintionController from "./components/ExaminationController/superAdmin";
 import PrivateRoute from "./PrivateRoute.jsx";
 import Unauthorized from "./components/Unauthorized.jsx";
+import DEOLayout from "./components/DEO/DEOLayout.jsx";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
           </Route>
           <Route element={<PrivateRoute allowedRoles={["ExaminationController"]} />}>
             <Route path="/admin/ExaminationController" element={<ExamintionController />} />
+          </Route>
+          <Route element={<PrivateRoute allowedRoles={["DEO"]} />}>
+            <Route path="/admin/DEO" element={<DEOLayout/>} />
           </Route>
         </Routes>
       </Router>

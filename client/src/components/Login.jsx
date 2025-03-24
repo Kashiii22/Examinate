@@ -70,6 +70,9 @@ export default function Login() {
           case "ExaminationController":
             navigate("/admin/ExaminationController"); 
             break;
+          case "DEO":
+            navigate("/admin/DEO")
+            break;
             default:
               navigate("/unauthorized");
         }
