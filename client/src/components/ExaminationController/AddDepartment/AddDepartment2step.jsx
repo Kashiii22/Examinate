@@ -70,7 +70,7 @@ export default function AddDepartment2step() {
         DOEData.append(key, DOE[key]);
       });
   
-      DOEData.append("university", university);
+      DOEData.append("universityName", university);
       DOEData.append("department", departmentData.departmentName);
       DOEData.append("passportPhoto", passportPhoto.file);
       console.log([...DOEData.entries()]);

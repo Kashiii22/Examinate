@@ -16,9 +16,4 @@ export const NAVIGATION = [
       title: 'Add Dean',
       icon: <AddIcon />,
     },
-    {
-      segment: 'Manage-Deans',
-      title: 'Manage Dean',
-      icon: <ManageAccountsIcon />,
-    },
   ];
