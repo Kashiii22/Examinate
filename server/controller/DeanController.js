@@ -1,4 +1,4 @@
-const DOE = require('../models/DOE.js');
+const Dean = require('../models/Dean');
 const path = require("path"); 
 async function generateUniqueUsername(dob, aadhar) {
     try {
@@ -17,12 +17,12 @@ async function generateUniqueUsername(dob, aadhar) {
         const baseID = `${YY}${MM}${DD}`;
 
         let uniqueDigits = aadhar.slice(-3);
-        let username = `D${baseID}${uniqueDigits}`;
-        let existingUser = await DOE.findOne({ username });
+        let username = `C${baseID}${uniqueDigits}`;
+        let existingUser = await Dean.findOne({ username });
 
         while (existingUser) {
             uniqueDigits = (parseInt(uniqueDigits) + 1).toString().padStart(3, "0");
-            username = `D${baseID}${uniqueDigits}`;
+            username = `C${baseID}${uniqueDigits}`;
             existingUser = await DOE.findOne({ username });
         }
         return username;
@@ -34,24 +34,24 @@ async function generateUniqueUsername(dob, aadhar) {
 
 
 
-module.exports.createDOE=async (req, res,next) => {
+module.exports.createDean=async (req, res,next) => {
     try {
         const { email, Name, mobile, universityName, aadhar, city, pincode, address, state, dob, department} = req.body;
         const dobDate = new Date(dob);
         const username = await generateUniqueUsername(dobDate, aadhar);
         const password = Name;
-        let user = await DOE.findOne({ username });
+        let user = await Dean.findOne({ username });
         if (user) return res.status(400).json({ message: 'Username already exists' });
         const passportPhotoPath = req.file ? path.join("uploads/profile", req.file.filename) : null;
-        const newUser = new DOE({
+        const newUser = new Dean({
             email, Name, mobile, universityName, aadhar, city, pincode, address, state, dob,username,password,department,passportPhoto:passportPhotoPath
         })
         await newUser.save();
         req.body.username= username;
         req.body.password= password;
-        // res.json({ message: "DOE Registered", username, password });
-        next();
     } catch (err) {
         res.status(500).json({ message: "Error creating DOE", error: err.message });
     }
 }
+
+

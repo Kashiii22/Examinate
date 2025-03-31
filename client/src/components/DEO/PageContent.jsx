@@ -20,7 +20,7 @@ export function PageContent({ pathname }) {
     case '/ManageUsers':
       element = <ManageUser/>;
       break;
-    case '/AddUniversity':
+    case '/Create-Deans':
       element = <AddUniversity2step/>;
       break;
     default:

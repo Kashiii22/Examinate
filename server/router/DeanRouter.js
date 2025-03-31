@@ -3,13 +3,11 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.SECRET;
-const DOE = require('../models/DOE');
+const {credentialsMail} = require('../mail.js');
 const multer = require("multer");
 const path = require("path"); 
-const {createDOE} = require('../controller/DOEController.js')
-const {credentialsMail} = require('../mail.js');
-
-
+const {createDean} = require('../controller/DeanController.js');
+const Dean = require('../models/Dean.js');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -21,15 +19,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+router.post("/createDean",upload.single("passportPhoto"),createDean);
 
-
-router.post("/createDOE",upload.single("passportPhoto"),createDOE,credentialsMail);
-
-  router.post('/login/D', async (req, res) => {
+  router.post('/login/C', async (req, res) => {
     try {
       
       const { username, password } = req.body;
-      const user = await DOE.findOne({ username });
+      const user = await Dean.findOne({ username });
       console.log(user);
       if (!user) return res.status(400).json({ message: 'Invalid credentials' });
       const isMatch = await bcrypt.compare(password, user.password);
@@ -41,5 +37,3 @@ router.post("/createDOE",upload.single("passportPhoto"),createDOE,credentialsMai
       res.status(500).json({ message: 'Server error', error: error.message });
     }
   });
-
-  module.exports = router;
