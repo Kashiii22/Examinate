@@ -68,19 +68,18 @@ export default function AddDepartment2step() {
       const DOEData = new FormData();
       Object.keys(DOE).forEach((key) => {
         DOEData.append(key, DOE[key]);
-      });
-  
+      });  
       DOEData.append("universityName", university);
       DOEData.append("department", departmentData.departmentName);
       DOEData.append("passportPhoto", passportPhoto.file);
       console.log([...DOEData.entries()]);
-      
   
       // Send DOE data
       const response1 = await axios.post("http://localhost:8000/api/createDOE", DOEData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
   
+      
       setMessage("Department and DOE created successfully");
   
       // Reset form values and stepper after successful submission

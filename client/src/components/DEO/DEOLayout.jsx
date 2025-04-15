@@ -10,6 +10,7 @@ import { demoTheme } from './Theme.jsx';
 import { NAVIGATION } from './navigation/Navigation.jsx';
 import { PageContent } from './PageContent.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 PageContent.propTypes = {
@@ -21,11 +22,20 @@ function DEOLayout({ window }) {
   const navigate = useNavigate(); 
   const demoWindow = window ? window() : undefined;
 
+  const user = useSelector((state) => state.auth.user);
+  const email = useSelector((state) => state.auth.email);
+  const BASE_URL = "http://localhost:8000"; // Update this to your actual server URL
+
+  const passportPhoto = useSelector((state) => state.auth.passportPhoto);
+  const sanitizedPassportPhoto = passportPhoto ? passportPhoto.replace(/\\/g, "/") : '';
+
+  const passportPhotoPath = passportPhoto ? `${BASE_URL}/${sanitizedPassportPhoto}` : '';
+  console.log("Final Image URL:", passportPhotoPath);
   const [session, setSession] = React.useState({
     user: {
-      name: localStorage.getItem('username') || 'Guest',
-      email: localStorage.getItem('email') || '',
-      image: 'https://avatars.githubusercontent.com/u/19550456',
+      name: user?.Name || '',
+      email: email || '',
+      image: passportPhotoPath || '',
     },
   });
 
@@ -33,15 +43,14 @@ function DEOLayout({ window }) {
     signIn: () => {
       setSession({
         user: {
-          name: localStorage.getItem('username') || 'Guest',
-          email: localStorage.getItem('email') || '',
-          image: 'https://avatars.githubusercontent.com/u/19550456',
+          name: user?.Name || '',
+          email: email || '',
+          image: passportPhotoPath || '',
         },
       });
     },
     signOut: async () => {
       try {
-
         localStorage.removeItem('username');
         localStorage.removeItem('email');
         setSession(null);

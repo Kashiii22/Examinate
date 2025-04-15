@@ -4,7 +4,7 @@ import { ManageUser } from './ManageUser/ManageUser.jsx';
 
 
 import Box from '@mui/material/Box';
-import { AddUniversity } from './AddUniversity/AddUniversity.jsx';
+
 import AddUniversity2step from './AddUniversity/AddUniversity2step.jsx';
 
 

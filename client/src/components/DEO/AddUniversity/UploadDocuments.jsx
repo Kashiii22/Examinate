@@ -16,7 +16,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-export default function UploadDocuments({ passportPhoto, setPassportPhoto, universityLogo, setUniversityLogo }) {
+export default function UploadDocuments({ passportPhoto, setPassportPhoto }) {
   const handleUpload = (event, setImage) => {
     const file = event.target.files[0];
     if (file) {
@@ -59,28 +59,6 @@ export default function UploadDocuments({ passportPhoto, setPassportPhoto, unive
           </Box>
         </Box>
 
-        {/* University Logo Upload */}
-        <Box sx={{ my: 5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="body1" gutterBottom>
-              University Logo
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 180 }}>
-              <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-                Upload
-                <VisuallyHiddenInput type="file" accept="image/*" onChange={(e) => handleUpload(e, setUniversityLogo)} />
-              </Button>
-              {universityLogo && (
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <img src={universityLogo.previewUrl} alt="University Logo" width={80} height={80} style={{ borderRadius: '10px' }} />
-                  <IconButton color="error" onClick={() => handleRemove(setUniversityLogo)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              )}
-            </Box>
-          </Box>
-        </Box>
       </CardContent>
     </Card>
   );
