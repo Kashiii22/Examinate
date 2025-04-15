@@ -4,19 +4,19 @@ import { Button, Box, Paper, CircularProgress } from "@mui/material";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import { AddUniversity } from "./AddUniversity";
+import { AddCluster } from "./AddCluster";
 import { AddUser } from "./AddUser";
 import UploadDocuments from "./UploadDocuments";
-
+import { useSelector } from "react-redux";
 export default function AddUniversity2step() {
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [passportPhoto, setPassportPhoto] = useState(null);
-  const [universityLogo, setUniversityLogo] = useState(null);
+  const university = useSelector((state) => state.auth.university);
 
   // University Data
-  const [examinationC, setExaminationC] = useState({
+  const [DeanData, setDeanData] = useState({
     Name: "",
     email: "",
     mobile: "",
@@ -28,29 +28,22 @@ export default function AddUniversity2step() {
     dob: "",
   });
 
-  // University Data
-  const [uniData, setUniData] = useState({
-    Name: "",
-    email: "",
-    city: "",
-    mobile: "",
-    address: "",
-    pinCode: "",
-    state: "",
-    establishedYear: "",
-    url: "",
-    uniType: "",
-  });
 
+  const [clusterData, setClusterData] = useState({
+    clusterID: "",
+    clusterName: "",
+    clusterEmail: "",
+    mobile: "",
+  });
+  
   // Validation function for each step
   const isStepValid = () => {
     if (activeStep === 0) {
-      return Object.values(uniData).every((val) => val && val.toString().trim() !== "");
+      return Object.values(clusterData).every((val) => val && val.toString().trim() !== "");
     } else if (activeStep === 1) {
-      console.log(examinationC)
-      return Object.values(examinationC).every((val) => val && val.toString().trim() !== "");
+      return Object.values(DeanData).every((val) => val && val.toString().trim() !== "");
     } else {
-      return passportPhoto && universityLogo;
+      return passportPhoto;
     }
   };
   
@@ -67,60 +60,52 @@ export default function AddUniversity2step() {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-  
+    
     try {
       // 🔹 FormData for University
-      const universityFormData = new FormData();
-      Object.keys(uniData).forEach((key) => {
-        universityFormData.append(key, uniData[key]);
-      });
-      universityFormData.append("ExaminationC",examinationC.Name);
-      universityFormData.append("universityLogo", universityLogo.file);
-      console.log(universityLogo);
-      await axios.post("http://localhost:8000/api/addUni", universityFormData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const clusterFormData = new FormData();
+      console.log(clusterData)
+      Object.keys(clusterData).forEach((key) => {
+        console.log(`Appending: ${key} = ${clusterData[key]}`);
+        clusterFormData.append(key, clusterData[key]);
       });
 
+      clusterFormData.append("Dean",DeanData.Name);
+      clusterFormData.append("university",university)
+      for (let pair of clusterFormData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+      const response1 = await axios.post("http://localhost:8000/api/createCluster", clusterFormData, {
+        headers: { "Content-Type": "application/json" }});
+      console.log(response1);
   
       console.log("University data submitted successfully!");
-  
       // 🔹 FormData for Examination Controller
-      const examinationFormData = new FormData();
-      Object.keys(examinationC).forEach((key) => {
-        examinationFormData.append(key, examinationC[key]);
+      const deanFormData = new FormData();
+      Object.keys(DeanData).forEach((key) => {
+        deanFormData.append(key, DeanData[key]);
       });
   
       // Append files
 
-      examinationFormData.append("passportPhoto", passportPhoto.file);
-      examinationFormData.append("universityName",uniData.Name);
-
-      
-
+      deanFormData.append("passportPhoto", passportPhoto.file);
+      deanFormData.append("universityName",university)
+      console.log(deanFormData)
 
 
-     const response =  await axios.post("http://localhost:8000/api/createExaminationC", examinationFormData, {
+     const response =  await axios.post("http://localhost:8000/api/createDean", deanFormData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       console.log(response);
-  
-      
-      setMessage("University and Examination Controller created successfully!");
 
-      setUniData({
-        Name: "",
-        email: "",
-        city: "",
+      setClusterData({
+        clusterID: "",
+        clusterName: "",
+        clusterEmail: "",
         mobile: "",
-        address: "",
-        pinCode: "",
-        state: "",
-        establishedYear: "",
-        url: "",
-        uniType: "",
       });
   
-      setExaminationC({
+      setDeanData({
         Name: "",
         email: "",
         mobile: "",
@@ -133,8 +118,12 @@ export default function AddUniversity2step() {
       });
   
       setPassportPhoto(null);
-      setUniversityLogo(null);
       setActiveStep(0); // Reset to Step 1
+      if (response1.status === 200 && response.status === 200) {
+        setMessage("Dean And Cluster Created Successfully"); // ✅ Now it will show success
+      } else {
+        setMessage("Failed to submit the form.");
+      }
       
     } catch (error) {
       console.error("Submission error:", error);
@@ -146,8 +135,8 @@ export default function AddUniversity2step() {
   
 
   const steps = [
-    "University Details",
-    "Examination Controller Details",
+    "Cluster Details",
+    "Dean Details",
     "Upload Documents",
   ];
 
@@ -178,20 +167,18 @@ export default function AddUniversity2step() {
           </Stepper>
         </Box>
         {activeStep === 0 && (
-          <AddUniversity uniData={uniData} setUniData={setUniData} />
+          <AddCluster clusterData={clusterData} setClusterData={setClusterData}/>
         )}
         {activeStep === 1 && (
           <AddUser
-            examinationC={examinationC}
-            setExaminationC={setExaminationC}
+            DeanData={DeanData}
+            setDeanData={setDeanData}
           />
         )}
         {activeStep === 2 && (
           <UploadDocuments
             passportPhoto={passportPhoto}
             setPassportPhoto={setPassportPhoto}
-            universityLogo={universityLogo}
-            setUniversityLogo={setUniversityLogo}
           />
         )}
       </Paper>
@@ -212,7 +199,7 @@ export default function AddUniversity2step() {
             visibility: activeStep === 0 ? "hidden" : "visible",
           }}
         >
-          Back
+          Back  
         </Button>
 
         <Button

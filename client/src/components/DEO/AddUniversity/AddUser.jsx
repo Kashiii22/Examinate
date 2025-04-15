@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Grid, TextField, InputAdornment } from "@mui/material";
 import axios from "axios";
 
-export const AddUser = ({ examinationC, setExaminationC }) => {
+export const AddUser = ({ DeanData, setDeanData }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setExaminationC({ ...examinationC, [name]: value });
+    setDeanData({ ...DeanData, [name]: value });
   };
 
   const formatAadhar = (aadhar) => {
@@ -15,7 +15,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
   const handleAadharChange = (e) => {
     const value = e.target.value.replace(/\s/g, "");
     if (/^\d{0,12}$/.test(value)) {
-      setExaminationC({ ...examinationC, aadhar: formatAadhar(value) });
+      setDeanData({ ...DeanData, aadhar: formatAadhar(value) });
     }
   };
 
@@ -27,7 +27,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
       const data = response.data[0];
 
       if (data.Status === "Success" && data.PostOffice?.length > 0) {
-        setExaminationC((prev) => ({
+        setDeanData((prev) => ({
           ...prev,
           city: data.PostOffice[0].District,
           state: data.PostOffice[0].State,
@@ -42,7 +42,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
 
   const handlePincodeChange = (e) => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 6);
-    setExaminationC((prev) => ({ ...prev, pincode: value }));
+    setDeanData((prev) => ({ ...prev, pincode: value }));
 
     if (value.length === 6) fetchLocation(value);
   };
@@ -63,7 +63,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
             variant="outlined"
             fullWidth
             name="Name"
-            value={examinationC.Name}
+            value={DeanData.Name}
             onChange={handleChange}
             required
           />
@@ -74,7 +74,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
             variant="outlined"
             fullWidth
             name="email"
-            value={examinationC.email}
+            value={DeanData.email}
             onChange={handleChange}
             required
           />
@@ -85,7 +85,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
             variant="outlined"
             fullWidth
             name="mobile"
-            value={examinationC.mobile}
+            value={DeanData.mobile}
             onChange={handleChange}
             required
           />
@@ -96,7 +96,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
             variant="outlined"
             fullWidth
             name="address"
-            value={examinationC.address}
+            value={DeanData.address}
             onChange={handleChange}
             required
           />
@@ -107,7 +107,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
             variant="outlined"
             fullWidth
             name="pincode"
-            value={examinationC.pincode}
+            value={DeanData.pincode}
             onChange={handlePincodeChange}
             required
             inputProps={{ maxLength: 6 }}
@@ -119,7 +119,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
             variant="outlined"
             fullWidth
             name="city"
-            value={examinationC.city}
+            value={DeanData.city}
             disabled
             required
           />
@@ -130,7 +130,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
             variant="outlined"
             fullWidth
             name="state"
-            value={examinationC.state}
+            value={DeanData.state}
             disabled
             required
           />
@@ -141,7 +141,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
             variant="outlined"
             fullWidth
             name="dob"
-            value={examinationC.dob}
+            value={DeanData.dob}
             onChange={handleChange}
             type="date"
             InputLabelProps={{ shrink: true }}
@@ -158,7 +158,7 @@ export const AddUser = ({ examinationC, setExaminationC }) => {
             variant="outlined"
             fullWidth
             name="aadhar"
-            value={examinationC.aadhar}
+            value={DeanData.aadhar}
             onChange={handleAadharChange}
             required
             inputProps={{ maxLength: 14 }}

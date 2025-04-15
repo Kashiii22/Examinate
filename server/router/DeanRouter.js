@@ -23,7 +23,6 @@ router.post("/createDean",upload.single("passportPhoto"),createDean);
 
   router.post('/login/C', async (req, res) => {
     try {
-      
       const { username, password } = req.body;
       const user = await Dean.findOne({ username });
       console.log(user);
@@ -31,9 +30,11 @@ router.post("/createDean",upload.single("passportPhoto"),createDean);
       const isMatch = await bcrypt.compare(password, user.password);
       console.log(isMatch);
       if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
-      const token = jwt.sign({ id: user._id , role:user.role}, JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ id: user._id, role: user.role, university: user.universityName ,passportPhoto:user.passportPhoto, Name:user.Name,email:user.email}, JWT_SECRET, { expiresIn: '1h' });
       res.json({ message: 'Login successful', token });
     } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
     }
   });
+
+  module.exports=router;

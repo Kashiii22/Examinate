@@ -9,7 +9,6 @@ import { demoTheme } from './Theme.jsx';
 import { NAVIGATION } from './navigation/Navigation.jsx';
 import { PageContent } from './PageContent.jsx';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 PageContent.propTypes = {

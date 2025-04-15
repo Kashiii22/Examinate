@@ -23,7 +23,7 @@ async function generateUniqueUsername(dob, aadhar) {
         while (existingUser) {
             uniqueDigits = (parseInt(uniqueDigits) + 1).toString().padStart(3, "0");
             username = `C${baseID}${uniqueDigits}`;
-            existingUser = await DOE.findOne({ username });
+            existingUser = await Dean.findOne({ username });
         }
         return username;
     } catch (error) {
@@ -34,7 +34,7 @@ async function generateUniqueUsername(dob, aadhar) {
 
 
 
-module.exports.createDean=async (req, res,next) => {
+module.exports.createDean=async (req, res) => {
     try {
         const { email, Name, mobile, universityName, aadhar, city, pincode, address, state, dob, department} = req.body;
         const dobDate = new Date(dob);
@@ -49,6 +49,7 @@ module.exports.createDean=async (req, res,next) => {
         await newUser.save();
         req.body.username= username;
         req.body.password= password;
+        res.json("Dean Created Successfully");
     } catch (err) {
         res.status(500).json({ message: "Error creating DOE", error: err.message });
     }

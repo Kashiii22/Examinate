@@ -12,6 +12,8 @@ const sAdminRouter = require('./router/sAdminRouter');
 const ExaminationCrouter = require('./router/ExaminationC');
 const departmentRouter = require("./router/departmentRouter");
 const DOERouter = require('./router/DOERouter');
+const clusterRouter = require('./router/clusterRouter.js');
+const DeanRouter = require('./router/DeanRouter.js');
 const {credentialsMail} = require('./mail.js')
 const app = express();
 const path=require('path');
@@ -54,7 +56,7 @@ const sessionOptions = {
 
 
 // Routes
-app.use("/api/", universityRouter, sAdminRouter, ExaminationCrouter, departmentRouter,DOERouter);
+app.use("/api/", universityRouter, sAdminRouter, ExaminationCrouter, departmentRouter,DOERouter,clusterRouter,DeanRouter);
 app.post("/sendmail",credentialsMail);
 // Start Server
 const PORT = process.env.PORT || 8000;
